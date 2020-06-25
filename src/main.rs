@@ -22,7 +22,11 @@ async fn main() {
     let conn = establish_connection();
     conn.transaction::<_, diesel::result::Error, _>(|| {
         let user = users.filter(name.eq("user1")).for_update().first::<User>(&conn).unwrap();
+
+        // compile error
         tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
+
+        println!("{:?}", user);
         Ok(())
     }).unwrap();
 }
